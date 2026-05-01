@@ -244,18 +244,13 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def check_libraries(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """فحص حالة المكتبات"""
-    status = "📋 *حالة المكتبات:*
-
-"
+    status = "📋 *حالة المكتبات:*\n\n"
 
     for name, available in LIBS_STATUS.items():
         icon = "✅" if available else "❌"
-        status += f"{icon} {name}
-"
+        status += f"{icon} {name}\n"
 
-    status += "
-⚠️ *إذا فيه ❌:*
-"
+    status += "\n⚠️ *إذا فيه ❌:*\n"
     status += "المكتبة غير مثبتة، بعض الميزات قد لا تعمل"
 
     await update.callback_query.edit_message_text(
@@ -290,21 +285,13 @@ async def smart_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not file_info:
         await update.message.reply_text(
-            f"❌ نوع الملف غير مدعوم!
-
-"
-            f"الملف: `{doc.file_name}`
-"
-            f"الأنواع المدعومة:
-"
-            f"• صور (JPG, PNG, WEBP)
-"
-            f"• Word (DOCX)
-"
-            f"• Excel (XLSX)
-"
-            f"• PowerPoint (PPTX)
-"
+            f"❌ نوع الملف غير مدعوم!\n\n"
+            f"الملف: `{doc.file_name}`\n"
+            f"الأنواع المدعومة:\n"
+            f"• صور (JPG, PNG, WEBP)\n"
+            f"• Word (DOCX)\n"
+            f"• Excel (XLSX)\n"
+            f"• PowerPoint (PPTX)\n"
             f"• PDF",
             parse_mode="Markdown"
         )
@@ -335,8 +322,7 @@ async def handle_image_conversion(update: Update, context: ContextTypes.DEFAULT_
 
     if not LIBS_STATUS["Pillow"]:
         await update.message.reply_text(
-            "❌ مكتبة Pillow غير مثبتة!
-"
+            "❌ مكتبة Pillow غير مثبتة!\n"
             "التحويل غير متاح.",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 رجوع", callback_data="back_menu")]])
         )
@@ -398,8 +384,7 @@ async def handle_image_conversion(update: Update, context: ContextTypes.DEFAULT_
         await update.message.reply_document(
             document=open(temp_pdf, "rb"),
             filename="converted.pdf",
-            caption=f"✅ تم التحويل بنجاح!
-"
+            caption=f"✅ تم التحويل بنجاح!\n"
                     f"🖼️ صورة → 📄 PDF"
         )
         logger.info("✅ تم إرسال PDF بنجاح")
@@ -427,8 +412,7 @@ async def handle_word_conversion(update: Update, context: ContextTypes.DEFAULT_T
             missing.append("reportlab")
 
         await update.message.reply_text(
-            f"❌ مكتبات ناقصة: {', '.join(missing)}
-"
+            f"❌ مكتبات ناقصة: {', '.join(missing)}\n"
             f"التحويل غير متاح.",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 رجوع", callback_data="back_menu")]])
         )
@@ -495,8 +479,7 @@ async def handle_word_conversion(update: Update, context: ContextTypes.DEFAULT_T
         await update.message.reply_document(
             document=open(temp_pdf, "rb"),
             filename="converted.pdf",
-            caption=f"✅ تم التحويل بنجاح!
-"
+            caption=f"✅ تم التحويل بنجاح!\n"
                     f"📝 Word → 📄 PDF"
         )
 
@@ -522,8 +505,7 @@ async def handle_excel_conversion(update: Update, context: ContextTypes.DEFAULT_
             missing.append("reportlab")
 
         await update.message.reply_text(
-            f"❌ مكتبات ناقصة: {', '.join(missing)}
-"
+            f"❌ مكتبات ناقصة: {', '.join(missing)}\n"
             f"التحويل غير متاح.",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 رجوع", callback_data="back_menu")]])
         )
@@ -591,8 +573,7 @@ async def handle_excel_conversion(update: Update, context: ContextTypes.DEFAULT_
         await update.message.reply_document(
             document=open(temp_pdf, "rb"),
             filename="converted.pdf",
-            caption=f"✅ تم التحويل بنجاح!
-"
+            caption=f"✅ تم التحويل بنجاح!\n"
                     f"📊 Excel → 📄 PDF"
         )
 
@@ -618,8 +599,7 @@ async def handle_ppt_conversion(update: Update, context: ContextTypes.DEFAULT_TY
             missing.append("reportlab")
 
         await update.message.reply_text(
-            f"❌ مكتبات ناقصة: {', '.join(missing)}
-"
+            f"❌ مكتبات ناقصة: {', '.join(missing)}\n"
             f"التحويل غير متاح.",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 رجوع", callback_data="back_menu")]])
         )
@@ -684,10 +664,8 @@ async def handle_ppt_conversion(update: Update, context: ContextTypes.DEFAULT_TY
         await update.message.reply_document(
             document=open(temp_pdf, "rb"),
             filename="converted.pdf",
-            caption=f"✅ تم التحويل بنجاح!
-"
-                    f"📽️ PowerPoint → 📄 PDF
-"
+            caption=f"✅ تم التحويل بنجاح!\n"
+                    f"📽️ PowerPoint → 📄 PDF\n"
                     f"📊 عدد الشرائح: {len(prs.slides)}"
         )
 
@@ -720,14 +698,9 @@ async def handle_pdf_operations(update: Update, context: ContextTypes.DEFAULT_TY
     ]
 
     await update.message.reply_text(
-        f"📄 *تم استلام ملف PDF*
-
-"
-        f"الاسم: `{doc.file_name}`
-"
-        f"الحجم: {doc.file_size / 1024:.1f} KB
-
-"
+        f"📄 *تم استلام ملف PDF*\n\n"
+        f"الاسم: `{doc.file_name}`\n"
+        f"الحجم: {doc.file_size / 1024:.1f} KB\n\n"
         f"اختر العملية:",
         parse_mode="Markdown",
         reply_markup=InlineKeyboardMarkup(keyboard)
@@ -750,9 +723,7 @@ async def merge_with_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     await query.edit_message_text(
-        "📎 *أرسل ملف PDF الثاني للدمج*
-
-"
+        "📎 *أرسل ملف PDF الثاني للدمج*\n\n"
         "سيتم دمج الملفين في PDF واحد",
         parse_mode="Markdown",
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 إلغاء", callback_data="back_menu")]])
@@ -834,11 +805,8 @@ async def split_this_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     await query.edit_message_text(
-        "✂️ *تقسيم PDF*
-
-"
-        "أرسل رقم الصفحة أو النطاق
-"
+        "✂️ *تقسيم PDF*\n\n"
+        "أرسل رقم الصفحة أو النطاق\n"
         "مثال: `1` أو `1-3`",
         parse_mode="Markdown",
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 إلغاء", callback_data="back_menu")]])
@@ -955,10 +923,8 @@ async def compress_this_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_user.id,
             document=open(temp_output, "rb"),
             filename="compressed.pdf",
-            caption=f"✅ تم الضغط!
-"
-                    f"📊 الأصلي: {original_size / 1024:.1f} KB
-"
+            caption=f"✅ تم الضغط!\n"
+                    f"📊 الأصلي: {original_size / 1024:.1f} KB\n"
                     f"📉 الجديد: {compressed_size / 1024:.1f} KB"
         )
 
